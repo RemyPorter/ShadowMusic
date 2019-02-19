@@ -21,6 +21,7 @@ fmod = sp.sin(space, sp.sin(space, 2) * 220) #because of broadcasting, you can u
 deriv = sp.sin(sp.sin(space, 2) * 2 * np.pi, sp.sin(space, 20) * 3) #the sin of a sin
 square = sp.square(space,440) #square wave
 modulated_square = sp.square(space,440)*sp.sin(space,440)-sp.square(space,443,0.5) #combining waves
+beating = (sp.sin(space,440) + sp.sin(space,110)) * sp.square(space,90000) * sp.square(space,1.50) * sp.sin(space,3) * sp.square(space,11) * sp.sin(space,0.5)
 
 play(concertA) 
 play(modulatedA)
@@ -33,12 +34,13 @@ play(complex_beat)
 play(fmod) 
 play(deriv) #this is just nutty
 play(complex_beat[::-1])
+play(beating)
 
-"""
+
 # Uncomment this block to save the data to files
 def save(name, data):
   sf.write(name, data, sp.SAMPLE_RATE, 'FLOAT')
-
+"""
 save('samples/concertA.wav', concertA)
 save('samples/modulatedA.wav', modulatedA)
 save('samples/square.wav', square)
@@ -49,4 +51,5 @@ save('samples/div.wav', div)
 save('samples/complex.wav', complex_beat)
 save('samples/fmod.wav', fmod)
 save('samples/deriv.wav', deriv)
+save('samples/beating.wav', beating)
 """
