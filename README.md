@@ -44,10 +44,22 @@ By adding and subtracting waves together, we can create very complex sounds:
 sd.play(sp.noise(space)*(sp.sigmoid(space, 2) - sp.sin(space,0.4) - sp.sin(space,0.25,1)) + sp.sin(space, 440)*(sp.sin(space,3)-sp.sin(space,4.25)) + sp.sin(space,310)*(sp.sin(space,3,1.254))) #complex beat
 ```
 
+Multiplication and division, of course, also work:
+
+```python
+sd.play((sp.sin(space, 17) / sp.sin(space, 3)) * 0.2 * sp.sin(space, 440))
+```
+
 Also, because of numpy's broadcasting, you can pass waveforms in the frequency parameter. This creates an odd wobble sound:
 
 ```python
 sd.play(sp.sin(space, sp.sin(space, 2) * 220))
+```
+
+Or, go really weird, and combine broadcasting with non-temporal spaces as inputs, like so:
+
+```python
+sd.play(sp.sin(sp.sin(space, 2) * 2 * np.pi, sp.sin(space, 20) * 3))
 ```
 
 # Simplicity Itself
