@@ -1,6 +1,6 @@
 import time
 import numpy as np
-import shadow as sp
+import shaded as sp
 import sounddevice as sd
 import soundfile as sf
 
