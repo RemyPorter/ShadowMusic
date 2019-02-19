@@ -1,5 +1,5 @@
 # Shadow Music
-A time-dimension-based synthesizer built using NumPy.
+A time-dimension-based synthesizer built using NumPy, for Python3.
 
 ## Shadow Philosophy
 Shadow is designed to generate audio by broadcasting functions across a temporal space. This means audio generation happens entirely in memory, and instead of using musical concepts like "beats" we tend to think in terms of intersecting and overlapping waveforms. It is, in its own way, designed to emulate the behavior of OpenGL fragment shaders, but for audio.
@@ -42,6 +42,12 @@ By adding and subtracting waves together, we can create very complex sounds:
 
 ```python
 sd.play(sp.noise(space)*(sp.sigmoid(space, 2) - sp.sin(space,0.4) - sp.sin(space,0.25,1)) + sp.sin(space, 440)*(sp.sin(space,3)-sp.sin(space,4.25)) + sp.sin(space,310)*(sp.sin(space,3,1.254))) #complex beat
+```
+
+Also, because of numpy's broadcasting, you can pass waveforms in the frequency parameter. This creates an odd wobble sound:
+
+```python
+sd.play(sp.sin(space, sp.sin(space, 2) * 220))
 ```
 
 # Simplicity Itself
