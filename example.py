@@ -22,6 +22,7 @@ deriv = sp.sin(sp.sin(space, 2) * 2 * np.pi, sp.sin(space, 20) * 3) #the sin of 
 square = sp.square(space,440) #square wave
 modulated_square = sp.square(space,440)*sp.sin(space,440)-sp.square(space,443,0.5) #combining waves
 beating = (sp.sin(space,440) + sp.sin(space,110)) * sp.square(space,90000) * sp.square(space,1.50) * sp.sin(space,3) * sp.square(space,11) * sp.sin(space,0.5)
+wamp = np.clip((sp.sin(space,200) - sp.square(space,101)*0.25) * (sp.sin(space,1.74) + sp.sin(space,sp.sin(space,200)*3+220-sp.sin(space,30)) + sp.sin(space,12)*0.25), -1., 1.)
 
 play(concertA) 
 play(modulatedA)
@@ -35,6 +36,7 @@ play(fmod)
 play(deriv) #this is just nutty
 play(complex_beat[::-1])
 play(beating)
+play(wamp)
 
 
 # Uncomment this block to save the data to files
@@ -52,4 +54,5 @@ save('samples/complex.wav', complex_beat)
 save('samples/fmod.wav', fmod)
 save('samples/deriv.wav', deriv)
 save('samples/beating.wav', beating)
+save('samples/wamp.wav', wamp)
 """
