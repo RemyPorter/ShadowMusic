@@ -31,6 +31,19 @@ array([ 0.        ,  0.06264832,  0.12505052, ..., -0.18696144,
 >>> sd.play(sp.sin(space, 440)) #play the wave using the sounddevice library
 ```
 
+### Generation Functions
+* `sin(space,freq,shift=0)`: apply a sin function to the contents of `space`, scaling so that, if space is timelike, the resulting wave is `freq`
+* `square(space,freq,shift=0)`: as sin, but a square wave
+* `sigmoid(space,freq,shift=0)`: as sin, but a sigmoid wave
+* `noise(space)` will generate random noise of the same size as the space, ignoring the contents of the space
+
+### Effects
+* `delay(space,duration,wet=0.5,dry=0.5)`: copies-and-rolls the input space, then mixes it with the original
+* **gain**: just multiply a space by a value, e.g. `sp.sin(space,440) * 3.`.
+* **clip**: use `np.clip`, e.g.: `np.clip(sp.sin(space,440)*5.,-1., 1.)`
+* **reverse**: use slices, e.g.: `space[::-1]`
+
+
 ## Complex Outcomes
 With a few basic waveforms and noise generation functions, we can create surprisingly complex sounds. For example, something similar to a beat could be created by multiplying waves together:
 
