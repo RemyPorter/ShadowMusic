@@ -8,7 +8,7 @@ Yes, that's a difficult and weird way to think about generating audio, but what 
 
 # Getting Started
 ## Space and Time
-The entry point for `shadow` is `space`. The `space` function generates a linear series in the time dimension, from `0.` to `n` where `n` is the `duration * sample rate`. So, a 3 second space, at 44100Hz sample rate, will be an array 132,300 elements long, and each element will store its offset in seconds. A `space` is the input for most operations.
+The entry point for `shaded` is `space`. The `space` function generates a linear series in the time dimension, from `0.` to `n` where `n` is the `duration * sample rate`. So, a 3 second space, at 44100Hz sample rate, will be an array 132,300 elements long, and each element will store its offset in seconds. A `space` is the input for most operations.
 
 **Example**:
 ```python
