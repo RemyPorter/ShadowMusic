@@ -1,6 +1,5 @@
 import numpy as np
-
-SAMPLE_RATE=44100
+from .const import SAMPLE_RATE
 
 def smoothstep(edge0, edge1, x):
   """
@@ -47,5 +46,17 @@ def delay(space, distance, wet=0.5, dry=0.5, sample_rate=SAMPLE_RATE):
   """Delay and mix"""
   d = int(distance * sample_rate)
   return np.roll(space, d) * wet + space * dry
-  
 
+def arp(space, sequence):
+  """
+  Breaks an arbitrary space up into equal sized units of sequence.
+  """
+  res = np.copy(space) #you need a copy because array_split changes the array in place
+  split = np.array_split(res, len(sequence)) #
+  for v,s in zip(sequence,split):
+    s[::] = v
+  return res
+
+def repeat(space, data_space):
+  """Repeat a dataset to fill our entire space via tiling"""
+  return np.tile(data_space, int(len(space)/len(data_space)))
