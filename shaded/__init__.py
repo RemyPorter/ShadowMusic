@@ -31,11 +31,21 @@ def sigmoid(space, freq, shift=0):
   return smoothstep(0, 1., sin(space, freq, shift)) + smoothstep(-1., 0., sin(space, freq, shift))
 
 def square(space, freq, shift=0):
+  """Simple 50% duty cycle square wave"""
   s = sin(space, freq, shift)
   return step(s)
+
+def saw(space, freq, shift=0):
+  """Sawtooth wave"""
+  return np.arctan(
+    1. / np.tan(
+      space * np.pi * freq + shift
+    )
+  )
   
 def delay(space, distance, wet=0.5, dry=0.5, sample_rate=SAMPLE_RATE):
   """Delay and mix"""
   d = int(distance * sample_rate)
   return np.roll(space, d) * wet + space * dry
   
+
