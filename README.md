@@ -1,6 +1,8 @@
 # Shaded Music
 A time-dimension-based synthesizer built using NumPy, for Python3.
 
+Listen to exported examples of audio [here](https://soundcloud.com/remy-porter/shaded-synthesizer-demo).
+
 ## Shaded Philosophy
 Shaded is designed to generate audio by broadcasting functions across a temporal space. This means audio generation happens entirely in memory, and instead of using musical concepts like "beats" we tend to think in terms of intersecting and overlapping waveforms. It is, in its own way, designed to emulate the behavior of OpenGL fragment shaders, but for audio.
 

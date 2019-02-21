@@ -26,6 +26,8 @@ wamp = np.clip((sp.sin(space,200) - sp.square(space,101)*0.25) * (sp.sin(space,1
 arp = sp.saw(space,sp.arp(space,[60,70,80,90,120,90,80,70,60])) * sp.sin(space,1.7) * sp.sin(space,3)
 ripple = np.fmod(sp.saw(space, sp.arp(space, [220, 240, 275,220,170]*5)), sp.saw(space, 0.3333)) * sp.saw(space, 0.7, shift=np.pi/2.)
 
+full_demo = np.concatenate((concertA, modulatedA, buzz, div, complex_beat, fmod, deriv, square, modulated_square, beating, wamp, arp, ripple))
+
 play(concertA) 
 play(modulatedA)
 play(square)
@@ -41,7 +43,6 @@ play(beating)
 play(wamp)
 play(arp)
 play(ripple)
-
 
 # Uncomment this block to save the data to files
 def save(name, data):
@@ -61,4 +62,5 @@ save('samples/beating.wav', beating)
 save('samples/wamp.wav', wamp)
 save('samples/arp.wav', arp)
 save('samples/ripple.wav', ripple)
+save('samples/full_demo.wav', full_demo)
 """
