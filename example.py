@@ -1,4 +1,5 @@
 import time
+import sys
 import numpy as np
 import shaded as sp
 import sounddevice as sd
@@ -25,42 +26,44 @@ beating = (sp.sin(space,440) + sp.sin(space,110)) * sp.square(space,90000) * sp.
 wamp = np.clip((sp.sin(space,200) - sp.square(space,101)*0.25) * (sp.sin(space,1.74) + sp.sin(space,sp.sin(space,200)*3+220-sp.sin(space,30)) + sp.sin(space,12)*0.25), -1., 1.)
 arp = sp.saw(space,sp.arp(space,[60,70,80,90,120,90,80,70,60])) * sp.sin(space,1.7) * sp.sin(space,3)
 ripple = np.fmod(sp.saw(space, sp.arp(space, [220, 240, 275,220,170]*5)), sp.saw(space, 0.3333)) * sp.saw(space, 0.7, shift=np.pi/2.)
+purr = sp.reverb(np.fmod(sp.saw(space, 1), sp.sin(space, 12)*2.), 0.125, 5, 0.75)
+full_demo = np.concatenate((concertA, modulatedA, buzz, div, complex_beat, fmod, deriv, square, modulated_square, beating, wamp, arp, ripple, purr))
 
-full_demo = np.concatenate((concertA, modulatedA, buzz, div, complex_beat, fmod, deriv, square, modulated_square, beating, wamp, arp, ripple))
+if len(sys.argv) == 1 or sys.argv[1] == 'play':
+  play(concertA) 
+  play(modulatedA)
+  play(square)
+  play(modulated_square)
+  play(buzz) 
+  play(buzz*one_hz) 
+  play(div)
+  play(complex_beat) 
+  play(fmod) 
+  play(deriv) #this is just nutty
+  play(complex_beat[::-1])
+  play(beating)
+  play(wamp)
+  play(arp)
+  play(ripple)
+  play(purr)
 
-play(concertA) 
-play(modulatedA)
-play(square)
-play(modulated_square)
-play(buzz) 
-play(buzz*one_hz) 
-play(div)
-play(complex_beat) 
-play(fmod) 
-play(deriv) #this is just nutty
-play(complex_beat[::-1])
-play(beating)
-play(wamp)
-play(arp)
-play(ripple)
-
-# Uncomment this block to save the data to files
 def save(name, data):
   sf.write(name, data, sp.SAMPLE_RATE, 'FLOAT')
-"""
-save('samples/concertA.wav', concertA)
-save('samples/modulatedA.wav', modulatedA)
-save('samples/square.wav', square)
-save('samples/modulated_square.wav', modulated_square)
-save('samples/buzz.wav', buzz)
-save('samples/modulatedBuzz.wav', buzz*one_hz)
-save('samples/div.wav', div)
-save('samples/complex.wav', complex_beat)
-save('samples/fmod.wav', fmod)
-save('samples/deriv.wav', deriv)
-save('samples/beating.wav', beating)
-save('samples/wamp.wav', wamp)
-save('samples/arp.wav', arp)
-save('samples/ripple.wav', ripple)
-save('samples/full_demo.wav', full_demo)
-"""
+
+if len(sys.argv) > 1 and sys.argv[1] == 'save':
+  save('samples/concertA.wav', concertA)
+  save('samples/modulatedA.wav', modulatedA)
+  save('samples/square.wav', square)
+  save('samples/modulated_square.wav', modulated_square)
+  save('samples/buzz.wav', buzz)
+  save('samples/modulatedBuzz.wav', buzz*one_hz)
+  save('samples/div.wav', div)
+  save('samples/complex.wav', complex_beat)
+  save('samples/fmod.wav', fmod)
+  save('samples/deriv.wav', deriv)
+  save('samples/beating.wav', beating)
+  save('samples/wamp.wav', wamp)
+  save('samples/arp.wav', arp)
+  save('samples/ripple.wav', ripple)
+  save('samples/purr.wav', purr)
+  save('samples/full_demo.wav', full_demo)

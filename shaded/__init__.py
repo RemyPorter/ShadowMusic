@@ -47,6 +47,18 @@ def delay(space, distance, wet=0.5, dry=0.5, sample_rate=SAMPLE_RATE):
   d = int(distance * sample_rate)
   return np.roll(space, d) * wet + space * dry
 
+def reverb(space, delay_time, iterations, falloff=0.5, sample_rate=SAMPLE_RATE):
+  """
+  Simple reverb with a gradual decay over time. `delay_time` is the echo time, `iterations` is how many echos to 
+  generate, `falloff` is how much quieter each echo is
+  """
+  res = np.zeros(space.shape)
+  d = np.copy(space)
+  for i in range(iterations):
+    d = delay(d, delay_time, wet=falloff, dry=0., sample_rate=SAMPLE_RATE)
+    res += d
+  return res
+
 def arp(space, sequence):
   """
   Breaks an arbitrary space up into equal sized units of sequence.
