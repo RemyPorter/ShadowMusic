@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import sounddevice as sd
+import soundfile as sf
 import shaded as sp
 from shaded.const import SAMPLE_RATE
 
@@ -19,6 +20,12 @@ rising_saw_30s = np.tile(sp.reverb(
     0.25, 15
   ), 10)
 rising_saw_30s *= sp.sin(long_space, 1./15.) * sp.sin(long_space, 1./17., shift=np.pi/4.)
-play(
-  sp.reverb(rising_saw_30s, 0.25, 8, 0.45)
-)
+
+seq = np.array([125, 225, 325, 175, 90, 95]*40)
+np.random.shuffle(seq)
+melody = sp.saw(long_space, sp.arp(long_space,seq)) * np.clip(sp.square(long_space,0.425), 0., 1.) * sp.sin(long_space,0.444) * sp.sin(long_space,0.01) * 0.45
+#play(
+sf.write('working/barron.wav',
+  sp.reverb(rising_saw_30s - melody, 0.25, 8, 0.45),
+  int(SAMPLE_RATE), 'FLOAT')
+#)
