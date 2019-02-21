@@ -24,6 +24,7 @@ modulated_square = sp.square(space,440)*sp.sin(space,440)-sp.square(space,443,0.
 beating = (sp.sin(space,440) + sp.sin(space,110)) * sp.square(space,90000) * sp.square(space,1.50) * sp.sin(space,3) * sp.square(space,11) * sp.sin(space,0.5)
 wamp = np.clip((sp.sin(space,200) - sp.square(space,101)*0.25) * (sp.sin(space,1.74) + sp.sin(space,sp.sin(space,200)*3+220-sp.sin(space,30)) + sp.sin(space,12)*0.25), -1., 1.)
 arp = sp.saw(space,sp.arp(space,[60,70,80,90,120,90,80,70,60])) * sp.sin(space,1.7) * sp.sin(space,3)
+ripple = np.fmod(sp.saw(space, sp.arp(space, [220, 240, 275,220,170]*5)), sp.saw(space, 0.3333)) * sp.saw(space, 0.7, shift=np.pi/2.)
 
 play(concertA) 
 play(modulatedA)
@@ -39,6 +40,7 @@ play(complex_beat[::-1])
 play(beating)
 play(wamp)
 play(arp)
+play(ripple)
 
 
 # Uncomment this block to save the data to files
@@ -58,4 +60,5 @@ save('samples/deriv.wav', deriv)
 save('samples/beating.wav', beating)
 save('samples/wamp.wav', wamp)
 save('samples/arp.wav', arp)
+save('samples/ripple.wav', ripple)
 """
