@@ -32,7 +32,7 @@ def sigmoid(space, freq, shift=0):
 def square(space, freq, shift=0):
   """Simple 50% duty cycle square wave"""
   s = sin(space, freq, shift)
-  return step(s)
+  return 2.*step(s)-1.
 
 def saw(space, freq, shift=0):
   """Sawtooth wave"""
