@@ -48,7 +48,7 @@ if len(sys.argv) == 1 or sys.argv[1] == 'play':
   play(purr)
 
 def save(name, data):
-  sf.write(name, data, sp.SAMPLE_RATE, 'FLOAT')
+  sf.write(name, data, int(sp.SAMPLE_RATE), 'FLOAT')
 
 if len(sys.argv) > 1 and sys.argv[1] == 'save':
   save('samples/concertA.wav', concertA)
