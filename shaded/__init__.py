@@ -14,9 +14,11 @@ def step(space):
   """A shelf function: all entries in space <= 0 become 0, all greater than 0 become 1."""
   return np.heaviside(space, 0)
 
-def normalize(space):
+def smooth_normalize(space):
   """
-  Take an arbitrary range and compact it into the range -1,1
+  Take an arbitrary range and compact it into the range -1,1,
+  by applying a `smoothstep`
+  
   input sets smaller than -1,1 are left unchanged
   """
   mi = np.min(space)
@@ -24,6 +26,16 @@ def normalize(space):
   if mi >= -1. and mx < 1.:
     return space
   return smoothstep(np.min(space), np.max(space), space) * 2. - 1.
+
+def scale_normalize(space):
+  """
+  Take an arbitrary range and compact it into the range -1,1
+  by scaling it relative to its peaks.
+
+  input sets smaller than the input range will be scaled UP
+  """
+  mx = np.max(np.abs(space))
+  return space / mx
 
 def space(duration, sample_rate=SAMPLE_RATE):
   """Generate a temporal space of `duration` seconds at `sample_rate` sampling frequency"""
