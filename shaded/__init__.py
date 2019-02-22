@@ -11,7 +11,19 @@ def smoothstep(edge0, edge1, x):
   return t * t * (3.0 - 2.0 * t)
 
 def step(space):
+  """A shelf function: all entries in space <= 0 become 0, all greater than 0 become 1."""
   return np.heaviside(space, 0)
+
+def normalize(space):
+  """
+  Take an arbitrary range and compact it into the range -1,1
+  input sets smaller than -1,1 are left unchanged
+  """
+  mi = np.min(space)
+  mx = np.max(space)
+  if mi >= -1. and mx < 1.:
+    return space
+  return smoothstep(np.min(space), np.max(space), space) * 2. - 1.
 
 def space(duration, sample_rate=SAMPLE_RATE):
   """Generate a temporal space of `duration` seconds at `sample_rate` sampling frequency"""
