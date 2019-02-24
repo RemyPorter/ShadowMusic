@@ -14,6 +14,10 @@ def step(space):
   """A shelf function: all entries in space <= 0 become 0, all greater than 0 become 1."""
   return np.heaviside(space, 0)
 
+def gate(space, point):
+  """Open (or with a `np.not`, close) a gate based on the absolute magnitude of values in space"""
+  return step(np.abs(space) - point)
+
 def smooth_normalize(space):
   """
   Take an arbitrary range and compact it into the range -1,1,
@@ -37,6 +41,16 @@ def scale_normalize(space):
   mx = np.max(np.abs(space))
   return space / mx
 
+def average(space, window, sample_rate=SAMPLE_RATE):
+  """
+  Average across a duration, "smoothing out" the signal.
+  """
+  return np.convolve(space, np.ones(int(window*sample_rate)), mode='same') / (window * sample_rate)
+
+def convolve(space, kernel):
+  """Convolve the signal using a 1D kernel"""
+  return np.convolve(space, kernel, mode='same')
+
 def space(duration, sample_rate=SAMPLE_RATE):
   """Generate a temporal space of `duration` seconds at `sample_rate` sampling frequency"""
   return np.mgrid[0:int(sample_rate*duration)] / sample_rate
@@ -53,9 +67,9 @@ def sigmoid(space, freq, shift=0):
   """Convert an input space to a sigmoidal wave with `freq` frequency. `shift` moves the phase."""
   return smoothstep(0, 1., sin(space, freq, shift)) + smoothstep(-1., 0., sin(space, freq, shift))
 
-def square(space, freq, shift=0):
-  """Simple 50% duty cycle square wave"""
-  s = sin(space, freq, shift)
+def square(space, freq, duty_cycle=0.5, shift=0):
+  """Generate a square wave by gating a sin"""
+  s = gate(sin(space, freq, shift), 1.-duty_cycle)
   return 2.*step(s)-1.
 
 def saw(space, freq, shift=0):
