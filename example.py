@@ -27,7 +27,8 @@ wamp = np.clip((sp.sin(space,200) - sp.square(space,101)*0.25) * (sp.sin(space,1
 arp = sp.saw(space,sp.arp(space,[60,70,80,90,120,90,80,70,60])) * sp.sin(space,1.7) * sp.sin(space,3)
 ripple = np.fmod(sp.saw(space, sp.arp(space, [220, 240, 275,220,170]*5)), sp.saw(space, 0.3333)) * sp.saw(space, 0.7, shift=np.pi/2.)
 purr = sp.reverb(np.fmod(sp.saw(space, 1), sp.sin(space, 12)*2.), 0.125, 5, 0.75)
-full_demo = np.concatenate((concertA, modulatedA, buzz, div, complex_beat, fmod, deriv, square, modulated_square, beating, wamp, arp, ripple, purr))
+snare = sp.noise(space)*(sp.gated_pulse(space,3,0.15) + sp.gated_pulse(space,4,0.15,-np.pi))*sp.sin(space,220)*sp.sin(space,2) #use pulses to create rhythmic patterns
+full_demo = np.concatenate((concertA, modulatedA, buzz, div, complex_beat, fmod, deriv, square, modulated_square, beating, wamp, arp, ripple, purr, snare))
 
 if len(sys.argv) == 1 or sys.argv[1] == 'play':
   play(concertA) 
@@ -46,6 +47,7 @@ if len(sys.argv) == 1 or sys.argv[1] == 'play':
   play(arp)
   play(ripple)
   play(purr)
+  play(snare)
 
 def save(name, data):
   sf.write(name, data, int(sp.SAMPLE_RATE), 'FLOAT')
@@ -66,4 +68,5 @@ if len(sys.argv) > 1 and sys.argv[1] == 'save':
   save('samples/arp.wav', arp)
   save('samples/ripple.wav', ripple)
   save('samples/purr.wav', purr)
+  save('samples/snare.wav', snare)
   save('samples/full_demo.wav', full_demo)
