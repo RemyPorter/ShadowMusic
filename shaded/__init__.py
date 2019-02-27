@@ -67,10 +67,15 @@ def sigmoid(space, freq, shift=0):
   """Convert an input space to a sigmoidal wave with `freq` frequency. `shift` moves the phase."""
   return smoothstep(0, 1., sin(space, freq, shift)) + smoothstep(-1., 0., sin(space, freq, shift))
 
-def square(space, freq, duty_cycle=0.5, shift=0):
+def square(space, freq, shift=0):
   """Generate a square wave by gating a sin"""
-  s = gate(sin(space, freq, shift), 1.-duty_cycle)
-  return 2.*step(s)-1.
+  return np.sign(sin(space, freq, shift))
+
+def pulse(space, freq, duty_cycle=0.5, shift=0):
+  """Generate a rectangular wave with a given duty cycle"""
+  s = square(space, freq, shift)
+  t = square(space, freq, shift+duty_cycle*2*np.pi)
+  return np.heaviside(s-t,0) * 2. - 1.
 
 def saw(space, freq, shift=0):
   """Sawtooth wave"""
