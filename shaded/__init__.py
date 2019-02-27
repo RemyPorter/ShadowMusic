@@ -71,11 +71,23 @@ def square(space, freq, shift=0):
   """Generate a square wave by gating a sin"""
   return np.sign(sin(space, freq, shift))
 
-def pulse(space, freq, duty_cycle=0.5, shift=0):
-  """Generate a rectangular wave with a given duty cycle"""
+def pulse(space, freq, duty_cycle=0.5, shift=0, normalize=True):
+  """
+  Generate a rectangular wave with a given duty cycle
+
+  This wave may either be in the range [0,1] (if normalize==False)
+  or may be in the range [-1,1] (if normalize==True, the default)
+  """
   s = square(space, freq, shift)
   t = square(space, freq, shift+duty_cycle*2*np.pi)
-  return np.heaviside(s-t,0) * 2. - 1.
+  wav = np.heaviside(s-t,0)
+  if normalize:
+    return wav * 2. - 1
+  return wav
+
+def gated_pulse(space, freq, duty_cycle, shift=0):
+  """A convenience wrapper around pulse which returns a non-normalized pulse. Good for gates"""
+  return pulse(space, freq, duty_cycle, shift, False)
 
 def saw(space, freq, shift=0):
   """Sawtooth wave"""
