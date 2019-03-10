@@ -44,10 +44,36 @@ def melody(space):
     sp.reverb(sp.saw(song, melody_pattern(song, 0.5, 2, 15, 7)), 1./55., 5)
   ) * sp.square(space+sp.sin(space, 1./40.)*40, 40)
 
+def whispers(space):
+  return sp.scale_normalize(
+    sp.noise(space) * 0.03 - sp.sin(space + sp.noise(space)*0.0001, sp.arp(space, np.array([98,99,98,99,97,98,99,97,96,99]*10)) * 5.) * 0.45
+    * sp.pulse(sp.sin(space, 0.01) * 50, 120, 0.25) * 0.02
+  )
+
+def whisper_slide(space):
+  return (
+    sp.sin(space, 0.01) * sp.sin(space,0.02) * sp.sin(space, sp.arp(space, [0.125, 0.5, 0.9, 3., 3.2, 0.125, 0.52, 0.4, 3., 9, 0.125]))
+  )
+
+def closing_scream(space):
+  return sp.saw(space, 990-sp.sin(space, 3)) - sp.saw(space/5.*sp.sin(space, 0.1), 890) - sp.saw(space, 650)
+
+def rpeak(space):
+  dur = len(space) / sp.SAMPLE_RATE
+  return sp.saw(space, dur / 20., np.pi/4.) * sp.gate(space, dur / 20. * 19.)
+
 song = sp.space(120)
 bass_line = sp.reverb(bass_prog(song, 20) * bass_beat(song) * bass_enter_exit(song, 7), 1./15., 10)
 drums = sp.reverb(drum_line(song), -1./30., 7)
 mel = melody(song) * melody_rhthym(song) * melody_gate(song, 3., 100)
+whispered = sp.reverb(whispers(song) * whisper_slide(song), 1./50., 12, 0.7)
+closing = sp.reverb(closing_scream(song), -1., 10) * rpeak(song)
+
+composition = (bass_line + drums * 0.5 + mel - whispered * 0.25 + closing + np.roll(closing, int(-30*sp.SAMPLE_RATE)) +
+  np.roll(closing, int(-60*sp.SAMPLE_RATE)) - np.fmod(np.roll(closing, int(17*sp.SAMPLE_RATE)), 0.75)
+) * sp.sin(song, 1./60.)
+
+sf.write('working/the_barron.wav', composition, int(sp.SAMPLE_RATE), 'FLOAT')
 play(
-  (bass_line + drums * 0.5 + mel) * sp.sin(song, 1./60.)
+  composition
 )
