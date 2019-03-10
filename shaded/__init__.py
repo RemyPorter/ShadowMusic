@@ -11,6 +11,7 @@ def smoothstep(edge0, edge1, x):
   return t * t * (3.0 - 2.0 * t)
 
 def step(space):
+  """A shelf function: all entries in space <= 0 become 0, all greater than 0 become 1."""
   return np.heaviside(space, 0)
 
 def gate(space, point):
@@ -66,10 +67,27 @@ def sigmoid(space, freq, shift=0):
   """Convert an input space to a sigmoidal wave with `freq` frequency. `shift` moves the phase."""
   return smoothstep(0, 1., sin(space, freq, shift)) + smoothstep(-1., 0., sin(space, freq, shift))
 
-def square(space, freq, duty_cycle=0.5, shift=0):
+def square(space, freq, shift=0):
   """Generate a square wave by gating a sin"""
-  s = gate(sin(space, freq, shift), 1.-duty_cycle)
-  return 2.*step(s)-1.
+  return np.sign(sin(space, freq, shift))
+
+def pulse(space, freq, duty_cycle=0.5, shift=0, normalize=True):
+  """
+  Generate a rectangular wave with a given duty cycle
+
+  This wave may either be in the range [0,1] (if normalize==False)
+  or may be in the range [-1,1] (if normalize==True, the default)
+  """
+  s = square(space, freq, shift)
+  t = square(space, freq, shift+duty_cycle*2*np.pi)
+  wav = np.heaviside(s-t,0)
+  if normalize:
+    return wav * 2. - 1
+  return wav
+
+def gated_pulse(space, freq, duty_cycle, shift=0):
+  """A convenience wrapper around pulse which returns a non-normalized pulse. Good for gates"""
+  return pulse(space, freq, duty_cycle, shift, False)
 
 def saw(space, freq, shift=0):
   """Sawtooth wave"""
