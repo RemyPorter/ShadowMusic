@@ -53,7 +53,7 @@ def convolve(space, kernel):
 
 def space(duration, sample_rate=SAMPLE_RATE):
   """Generate a temporal space of `duration` seconds at `sample_rate` sampling frequency"""
-  return np.mgrid[0:int(sample_rate*duration)] / sample_rate
+  return np.linspace(0, duration, duration*sample_rate)
 
 def noise(space):
   """Output random noise in the same range as our temporal space"""
@@ -73,7 +73,7 @@ def square(space, freq, shift=0):
 
 def pulse(space, freq, duty_cycle=0.5, shift=0, normalize=True):
   """
-  Generate a rectangular wave with a given duty cycle
+  Generate a rectangular wave with a given duty cycle 
 
   This wave may either be in the range [0,1] (if normalize==False)
   or may be in the range [-1,1] (if normalize==True, the default)
@@ -118,7 +118,7 @@ def arp(space, sequence):
   """
   Breaks an arbitrary space up into equal sized units of sequence.
   """
-  res = np.copy(space) #you need a copy because array_split changes the array in place
+  res = np.zeros(space.shape)
   split = np.array_split(res, len(sequence)) #
   for v,s in zip(sequence,split):
     s[::] = v
